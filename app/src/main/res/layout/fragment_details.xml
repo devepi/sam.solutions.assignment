@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.mancave.pixabay.app.details.DetailsViewModel"
+            />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:imageUrl="@{viewModel.imageUrl}"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <TextView
+                style="@style/DetailsTextView"
+                android:text="@{viewModel.user}"
+                android:paddingTop="5dp"
+                />
+
+            <TextView
+                style="@style/DetailsTextView"
+                android:text="@{viewModel.tags}"
+                />
+
+            <TextView
+                style="@style/DetailsTextView"
+                android:text="@{viewModel.likes}"
+                />
+
+            <TextView
+                style="@style/DetailsTextView"
+                android:text="@{viewModel.downloads}"
+                />
+
+            <TextView
+                style="@style/DetailsTextView"
+                android:text="@{viewModel.comments}"
+                android:paddingBottom="5dp"
+                />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

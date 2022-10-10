@@ -13,20 +13,19 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class DetailsFragment : Fragment() {
 
-    private val args: DetailsFragmentArgs by navArgs()
+  private val args: DetailsFragmentArgs by navArgs()
 
-    private val viewModel: DetailsViewModel by viewModels {
-        DetailsViewModel.Factory(args.image)
+  private val viewModel: DetailsViewModel by viewModels {
+    DetailsViewModel.Factory(args.image)
+  }
+
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View = FragmentDetailsBinding.inflate(inflater, container, false)
+    .apply {
+      this.lifecycleOwner = viewLifecycleOwner
+      this.viewModel = this@DetailsFragment.viewModel
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = FragmentDetailsBinding.inflate(inflater, container, false)
-        .apply {
-            this.lifecycleOwner = viewLifecycleOwner
-            this.viewModel = this@DetailsFragment.viewModel
-        }
-        .root
-
+    .root
 }

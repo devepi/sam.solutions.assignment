@@ -7,21 +7,21 @@ import retrofit2.Response
 import java.io.IOException
 
 inline fun <T> PixabyApi.requestAsResult(
-    requestExecutor: (PixabyApi) -> Response<T>
+  requestExecutor: (PixabyApi) -> Response<T>
 ): Result<T> {
-    return try {
-        val response = requestExecutor(this)
-        val body = response.body()
-        if (body != null) {
-            Result.success(body)
-        } else Result.failure(
-            if (!response.isSuccessful) {
-                HttpException(response)
-            } else IllegalStateException("Body expected")
-        )
-    } catch (serializationException: SerializationException) {
-        Result.failure(serializationException)
-    } catch (networkException: IOException) {
-        Result.failure(networkException)
-    }
+  return try {
+    val response = requestExecutor(this)
+    val body = response.body()
+    if (body != null) {
+      Result.success(body)
+    } else Result.failure(
+      if (!response.isSuccessful) {
+        HttpException(response)
+      } else IllegalStateException("Body expected")
+    )
+  } catch (serializationException: SerializationException) {
+    Result.failure(serializationException)
+  } catch (networkException: IOException) {
+    Result.failure(networkException)
+  }
 }

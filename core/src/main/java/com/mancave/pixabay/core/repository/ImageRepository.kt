@@ -1,7 +1,9 @@
 package com.mancave.pixabay.core.repository
 
-import com.mancave.pixabay.core.model.SearchResponse
+import androidx.paging.PagingData
+import com.mancave.pixabay.core.model.Image
+import kotlinx.coroutines.flow.Flow
 
 interface ImageRepository {
-    suspend fun find(query: String): Result<SearchResponse>
+  suspend fun find(query: String): Flow<PagingData<Image>>
 }

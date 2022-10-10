@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -39,7 +41,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.6.1'
 
-    implementation project(":core")
+    kapt "androidx.room:room-compiler:$room_version"
+
+    api project(":core")
 
     testImplementation 'junit:junit:4.13.2'
 

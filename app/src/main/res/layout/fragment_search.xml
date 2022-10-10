@@ -1,29 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
+  <data>
 
-        <variable
-            name="viewModel"
-            type="com.mancave.pixabay.app.search.view.SearchViewModel" />
+    <variable
+      name="adapter"
+      type="com.mancave.pixabay.app.search.view.SearchResultAdapter" />
 
-    </data>
+    <variable
+      name="viewModel"
+      type="com.mancave.pixabay.app.search.view.SearchViewModel" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="#f0f0f0">
+  </data>
 
-        <com.mancave.pixabay.app.internal.view.ViewSwitcher
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:item="@{viewModel.state}"
-            app:itemBinding="@{viewModel.stateBinding}"
-            />
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    android:orientation="vertical">
 
-    </LinearLayout>
+    <EditText
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:text="fruits"
+      android:onTextChanged="@{viewModel.onTextChanged}"
+      />
+
+    <androidx.recyclerview.widget.RecyclerView
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:adapter="@{adapter}"
+      android:clipChildren="false"
+      android:clipToPadding="false"
+      android:padding="5dp"
+      android:scrollbarStyle="outsideOverlay"
+      android:scrollbars="vertical"
+      app:layoutManager=".search.view.ImagesLayoutManager"
+      tools:itemCount="5"
+      tools:listitem="@layout/image_row" />
+
+  </LinearLayout>
 
 </layout>

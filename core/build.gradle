@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-android-extensions'
     id 'kotlinx-serialization'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -44,6 +45,14 @@ dependencies {
 
     api "org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization_runtime_version"
     api "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$retrofit_serialization_converter_version"
+
+    api "androidx.paging:paging-runtime:$paging_version"
+    api "androidx.paging:paging-runtime-ktx:$paging_version"
+
+    api "androidx.room:room-runtime:$room_version"
+    api "androidx.room:room-ktx:$room_version"
+    api "androidx.room:room-paging:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation 'androidx.appcompat:appcompat:1.5.1'

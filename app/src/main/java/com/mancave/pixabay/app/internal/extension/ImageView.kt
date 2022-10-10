@@ -6,7 +6,7 @@ import coil.load
 
 @BindingAdapter("imageUrl")
 internal fun ImageView.bindImageUrl(imageUrl: String) {
-    load(imageUrl) {
-        crossfade(true)
-    }
+  load(imageUrl) {
+    crossfade(true)
+  }
 }

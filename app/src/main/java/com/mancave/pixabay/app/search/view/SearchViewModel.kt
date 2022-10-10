@@ -1,70 +1,42 @@
 package com.mancave.pixabay.app.search.view
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mancave.pixabay.app.BR
-import com.mancave.pixabay.app.R
-import com.mancave.pixabay.app.search.view.SearchStateViewModel.*
+import androidx.paging.cachedIn
+import androidx.paging.map
 import com.mancave.pixabay.core.model.Image
 import com.mancave.pixabay.core.repository.ImageRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.tatarka.bindingcollectionadapter2.ItemBinding
-import me.tatarka.bindingcollectionadapter2.itembindings.OnItemBindClass
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val repository: ImageRepository
+  private val repository: ImageRepository
 ) : ViewModel() {
 
-    val state: ObservableField<Any> = ObservableField(Loading)
+  private val queryFlow = MutableStateFlow("fruits")
 
-    val stateBinding: ItemBinding<Any> = ItemBinding.of(
-        OnItemBindClass<Any>()
-            .map(
-                Loading::class.java,
-                BR.viewModel,
-                R.layout.search_loading_view
-            )
-            .map(
-                Failure::class.java,
-                BR.viewModel,
-                R.layout.search_error_view
-            )
-            .map(
-                Success::class.java,
-                BR.viewModel,
-                R.layout.search_items_view
-            )
-    )
+  var onImageSelected: ((Image) -> Unit)? = null
 
-    var onImageSelected: ((Image) -> Unit)? = null
-
-    init {
-        viewModelScope.launch {
-            state.set(Loading)
-            val response = withContext(Dispatchers.IO) {
-                repository.find("fruits")
-            }
-            response.fold(
-                onSuccess = {
-                    state.set(
-                        Success(
-                            images = it.images,
-                            onItemSelected = { image ->
-                                onImageSelected?.invoke(image)
-                            }
-                        )
-                    )
-                },
-                onFailure = {
-                    state.set(Failure(it))
-                }
-            )
+  @OptIn(FlowPreview::class)
+  val items = queryFlow
+    .distinctUntilChangedBy { it }
+    .debounce(500)
+    .flatMapLatest {
+      repository.find(it)
+    }.map { pagingData ->
+      pagingData.map {
+        ImageViewModel(it) { img ->
+          onImageSelected?.invoke(img)
         }
-    }
+      }
+    }.cachedIn(viewModelScope)
+
+  fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+    queryFlow.value = s.toString()
+  }
 }
